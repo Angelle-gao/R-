@@ -1,0 +1,60 @@
+library(stringr)
+
+library(plyr)
+
+library(lubridate)
+
+library(ggplot2)
+
+library(reshape2)
+
+library(igraph)
+
+#英文对话数据集部分
+E.dialoguesrcdata<-readLines("/home/kesci/input/医学对话/英文数据集.txt")
+E.doctor<-E.dialoguesrcdata[grep("Doctor:",E.dialoguesrcdata)+1]
+write.csv(E.doctor, file="/home/kesci/input/医学对话/英文医学对话-医生dialogue.csv")
+
+E.patient<-E.dialoguesrcdata[grep("Patient:",E.dialoguesrcdata)+1]
+write.csv(E.patient, file="/home/kesci/input/医学对话/英文医学对话-病人dialogue.csv")
+head(E.patient)
+
+E.description<-E.dialoguesrcdata[grep("Description",E.dialoguesrcdata)+1]
+write.csv(E.description, file="/home/kesci/input/医学对话/英文医学对话-description.csv")
+head(E.description)
+
+#丁香园时间序列——DXYNEWS时序分析——分词词云图
+news<-read.csv('/home/kesci/input/ncov6321/DXYNews.csv',encoding="UTF-8")
+news<-news[,-10]
+news<-news[,-8]
+head(news)
+
+install.packages("jiebaR")
+
+library(jiebaR)
+
+wk = worker()
+write.csv(segment(as.character(news[,4]),wk), file="/home/kesci/input/DXYnews分词/DXYNewstitle分词.csv")
+
+news.1.29<-read.csv('/home/kesci/input/DXYnews分词/r1.29.csv',encoding="UTF-8")
+
+freq1.29R<-freq(as.character(news.1.29[,2]))
+
+library(wordcloud2)
+
+wordcloud1.29R<-wordcloud2(freq1.29R,color = "random-light", backgroundColor = "grey")
+wordcloud1.29R
+
+news.3.23<-read.csv('/home/kesci/input/DXYnews分词/r3.23.csv',encoding="UTF-8")
+
+freq3.23R<-freq(as.character(news.3.23[,2]))
+
+wordcloud3.23R<-wordcloud2(freq3.23R,color = "random-light", backgroundColor = "grey")
+wordcloud3.23R
+
+news.4.6<-read.csv('/home/kesci/input/DXYnews分词/r4.6.csv',encoding="UTF-8")
+
+freq4.6R<-freq(as.character(news.4.6[,2]))
+
+wordcloud4.6R<-wordcloud2(freq4.6R,size=0.6,color = "random-light", backgroundColor = "grey")
+wordcloud4.6R
